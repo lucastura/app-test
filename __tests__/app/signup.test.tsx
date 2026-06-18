@@ -20,6 +20,11 @@ jest.mock("expo-router", () => {
 
 jest.spyOn(Alert, "alert");
 
+// título da tela e label do botão são ambos "Cadastrar" — index 1 é sempre o botão
+function getCadastrarButton() {
+  return screen.getAllByText("Cadastrar")[1];
+}
+
 describe("Tela de Cadastro (src/app/signup.tsx)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -28,9 +33,9 @@ describe("Tela de Cadastro (src/app/signup.tsx)", () => {
   it("deve exibir alerta de erro se as senhas não forem iguais", async () => {
     await render(<Signup />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
-    fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senhaDiferente");
-    fireEvent.press(screen.getByText("Cadastrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senhaDiferente");
+    await fireEvent.press(getCadastrarButton());
 
     expect(Alert.alert).toHaveBeenCalledWith("Erro", "As senhas não são iguais");
     expect(createUserWithEmailAndPassword).not.toHaveBeenCalled();
@@ -43,12 +48,12 @@ describe("Tela de Cadastro (src/app/signup.tsx)", () => {
 
     await render(<Signup />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("Nome"), "Usuário Teste");
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), " teste@teste.com ");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaSegura123");
-    fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senhaSegura123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Nome"), "Usuário Teste");
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), " teste@teste.com ");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaSegura123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senhaSegura123");
 
-    fireEvent.press(screen.getByText("Cadastrar"));
+    await fireEvent.press(getCadastrarButton());
 
     await waitFor(() => {
       expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
@@ -67,10 +72,10 @@ describe("Tela de Cadastro (src/app/signup.tsx)", () => {
 
     await render(<Signup />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "usado@teste.com");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
-    fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senha123");
-    fireEvent.press(screen.getByText("Cadastrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "usado@teste.com");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senha123");
+    await fireEvent.press(getCadastrarButton());
 
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith("Esse email já está em uso");
@@ -84,10 +89,10 @@ describe("Tela de Cadastro (src/app/signup.tsx)", () => {
 
     await render(<Signup />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "email-errado");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
-    fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senha123");
-    fireEvent.press(screen.getByText("Cadastrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "email-errado");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senha123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "senha123");
+    await fireEvent.press(getCadastrarButton());
 
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith("E-Mail inválido");
@@ -101,10 +106,10 @@ describe("Tela de Cadastro (src/app/signup.tsx)", () => {
 
     await render(<Signup />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "123");
-    fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "123");
-    fireEvent.press(screen.getByText("Cadastrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "123");
+    await fireEvent.changeText(screen.getByPlaceholderText("Confirmar Senha"), "123");
+    await fireEvent.press(getCadastrarButton());
 
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith("Erro desconhecido ao criar conta");

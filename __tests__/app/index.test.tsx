@@ -32,7 +32,7 @@ describe("Tela de Login (src/app/index.tsx)", () => {
   it("deve exibir alerta de erro se e-mail ou senha estiverem vazios", async () => {
     await render(<Index />);
 
-    fireEvent.press(screen.getByText("Entrar"));
+    await fireEvent.press(screen.getByText("Entrar"));
 
     expect(Alert.alert).toHaveBeenCalledWith("Erro", "Preencha e-mail e senha!");
     expect(signInWithEmailAndPassword).not.toHaveBeenCalled();
@@ -45,9 +45,9 @@ describe("Tela de Login (src/app/index.tsx)", () => {
 
     await render(<Index />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com ");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaSegura123");
-    fireEvent.press(screen.getByText("Entrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com ");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaSegura123");
+    await fireEvent.press(screen.getByText("Entrar"));
 
     await waitFor(() => {
       expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
@@ -65,9 +65,9 @@ describe("Tela de Login (src/app/index.tsx)", () => {
 
     await render(<Index />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com");
-    fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaErrada");
-    fireEvent.press(screen.getByText("Entrar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com");
+    await fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaErrada");
+    await fireEvent.press(screen.getByText("Entrar"));
 
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith("Erro no Login", errorMessage);

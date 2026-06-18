@@ -1,3 +1,5 @@
+//signup.tsx
+
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Alert } from "react-native";

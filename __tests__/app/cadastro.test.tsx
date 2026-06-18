@@ -58,7 +58,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => expect(getDocs).toHaveBeenCalled());
 
-    fireEvent.press(screen.getByText("Cadastrar Produto"));
+    await fireEvent.press(screen.getByText("Cadastrar Produto"));
 
     expect(Alert.alert).toHaveBeenCalledWith("Aviso", "Preencha todos os campos do produto.");
     expect(addDoc).not.toHaveBeenCalled();
@@ -69,11 +69,11 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => expect(getDocs).toHaveBeenCalled());
 
-    fireEvent.changeText(screen.getByPlaceholderText("Produto (ex: Arroz)"), "Feijão");
-    fireEvent.changeText(screen.getByPlaceholderText("Validade (ex: 10/12/2026)"), "01/01/2025");
-    fireEvent.changeText(screen.getByPlaceholderText("Quantidade (ex: 50)"), "10");
+    await fireEvent.changeText(screen.getByPlaceholderText("Produto (ex: Arroz)"), "Feijão");
+    await fireEvent.changeText(screen.getByPlaceholderText("Validade (ex: 10/12/2026)"), "01/01/2025");
+    await fireEvent.changeText(screen.getByPlaceholderText("Quantidade (ex: 50)"), "10");
 
-    fireEvent.press(screen.getByText("Cadastrar Produto"));
+    await fireEvent.press(screen.getByText("Cadastrar Produto"));
 
     await waitFor(() => {
       expect(addDoc).toHaveBeenCalledWith(
@@ -93,7 +93,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
-    fireEvent.press(screen.getByText("Editar"));
+    await fireEvent.press(screen.getByText("Editar"));
 
     expect(screen.getByPlaceholderText("Produto (ex: Arroz)").props.value).toBe("Arroz");
     expect(screen.getByPlaceholderText("Quantidade (ex: 50)").props.value).toBe("50");
@@ -107,9 +107,9 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
-    fireEvent.press(screen.getByText("Editar"));
-    fireEvent.changeText(screen.getByPlaceholderText("Quantidade (ex: 50)"), "100");
-    fireEvent.press(screen.getByText("Atualizar Produto"));
+    await fireEvent.press(screen.getByText("Editar"));
+    await fireEvent.changeText(screen.getByPlaceholderText("Quantidade (ex: 50)"), "100");
+    await fireEvent.press(screen.getByText("Atualizar Produto"));
 
     await waitFor(() => {
       expect(updateDoc).toHaveBeenCalled();
@@ -122,7 +122,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
-    fireEvent.press(screen.getByText("Excluir"));
+    await fireEvent.press(screen.getByText("Excluir"));
 
     await waitFor(() => {
       expect(deleteDoc).toHaveBeenCalled();
