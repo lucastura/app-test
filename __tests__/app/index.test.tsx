@@ -1,14 +1,13 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert } from "react-native";
-import Index from "../../src/app/index"; // Caminho corrigido!
+import Index from "../../src/app/index";
 
-// --- 1. CONFIGURAÇÃO DOS MOCKS ---
 jest.mock("firebase/auth", () => ({
   signInWithEmailAndPassword: jest.fn(),
   onAuthStateChanged: jest.fn((auth, callback) => {
-    callback(null); 
-    return jest.fn(); 
+    callback(null);
+    return jest.fn();
   }),
 }));
 
@@ -16,35 +15,36 @@ jest.mock("../../src/lib/firebase", () => ({
   auth: {},
 }));
 
-jest.mock("expo-router", () => ({
-  Link: "Link",
-}));
+jest.mock("expo-router", () => {
+  const { Text } = require("react-native");
+  return {
+    Link: ({ children }: any) => <Text>{children}</Text>,
+  };
+});
 
 jest.spyOn(Alert, "alert");
 
-// --- 2. SUÍTE DE TESTES ---
 describe("Tela de Login (src/app/index.tsx)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("deve exibir alerta de erro se e-mail ou senha estiverem vazios", () => {
-    render(<Index />);
-    
-    // Na versão moderna, usamos screen.getByText
+  it("deve exibir alerta de erro se e-mail ou senha estiverem vazios", async () => {
+    await render(<Index />);
+
     fireEvent.press(screen.getByText("Entrar"));
-    
+
     expect(Alert.alert).toHaveBeenCalledWith("Erro", "Preencha e-mail e senha!");
     expect(signInWithEmailAndPassword).not.toHaveBeenCalled();
   });
 
   it("deve chamar signInWithEmailAndPassword e exibir alerta de sucesso", async () => {
     (signInWithEmailAndPassword as jest.Mock).mockResolvedValueOnce({
-      user: { email: "teste@teste.com" }
+      user: { email: "teste@teste.com" },
     });
 
-    render(<Index />);
-    
+    await render(<Index />);
+
     fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com ");
     fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaSegura123");
     fireEvent.press(screen.getByText("Entrar"));
@@ -63,8 +63,8 @@ describe("Tela de Login (src/app/index.tsx)", () => {
     const errorMessage = "Firebase: Error (auth/invalid-credential).";
     (signInWithEmailAndPassword as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
-    render(<Index />);
-    
+    await render(<Index />);
+
     fireEvent.changeText(screen.getByPlaceholderText("E-mail"), "teste@teste.com");
     fireEvent.changeText(screen.getByPlaceholderText("Senha"), "senhaErrada");
     fireEvent.press(screen.getByText("Entrar"));

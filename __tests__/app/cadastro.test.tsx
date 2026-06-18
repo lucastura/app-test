@@ -43,7 +43,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
   });
 
   it("deve carregar e exibir os registros do banco ao abrir a tela", async () => {
-    render(<Cadastro />);
+    await render(<Cadastro />);
 
     await waitFor(() => {
       expect(getDocs).toHaveBeenCalled();
@@ -54,8 +54,8 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
   });
 
   it("deve exibir alerta se tentar cadastrar produto com campos vazios", async () => {
-    render(<Cadastro />);
-    
+    await render(<Cadastro />);
+
     await waitFor(() => expect(getDocs).toHaveBeenCalled());
 
     fireEvent.press(screen.getByText("Cadastrar Produto"));
@@ -65,8 +65,8 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
   });
 
   it("deve chamar addDoc com os dados corretos ao cadastrar um novo produto", async () => {
-    render(<Cadastro />);
-    
+    await render(<Cadastro />);
+
     await waitFor(() => expect(getDocs).toHaveBeenCalled());
 
     fireEvent.changeText(screen.getByPlaceholderText("Produto (ex: Arroz)"), "Feijão");
@@ -77,11 +77,11 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     await waitFor(() => {
       expect(addDoc).toHaveBeenCalledWith(
-        undefined, 
+        undefined,
         expect.objectContaining({
           produto: "Feijão",
           validade: "01/01/2025",
-          quantidade: "10"
+          quantidade: "10",
         })
       );
       expect(Alert.alert).toHaveBeenCalledWith("Sucesso", "Produto cadastrado com sucesso!");
@@ -89,7 +89,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
   });
 
   it("deve preencher os inputs e alterar o botão ao clicar em Editar", async () => {
-    render(<Cadastro />);
+    await render(<Cadastro />);
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
@@ -97,13 +97,13 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
 
     expect(screen.getByPlaceholderText("Produto (ex: Arroz)").props.value).toBe("Arroz");
     expect(screen.getByPlaceholderText("Quantidade (ex: 50)").props.value).toBe("50");
-    
+
     expect(screen.getByText("Atualizar Produto")).toBeTruthy();
     expect(screen.getByText("Cancelar Edição")).toBeTruthy();
   });
 
   it("deve chamar updateDoc ao editar e salvar um produto", async () => {
-    render(<Cadastro />);
+    await render(<Cadastro />);
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
@@ -118,7 +118,7 @@ describe("Tela de Cadastro de Estoque (src/app/cadastro.tsx)", () => {
   });
 
   it("deve chamar deleteDoc ao clicar em Excluir", async () => {
-    render(<Cadastro />);
+    await render(<Cadastro />);
 
     await waitFor(() => expect(screen.getByText("Arroz")).toBeTruthy());
 
