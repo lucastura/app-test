@@ -20,8 +20,10 @@ export function formatPrice(value: number, decimalPlaces: number = 2): string {
   const isNegative = value < 0;
   const absoluteValue = Math.abs(value);
   
-  // Arredonda e fixa as casas decimais
-  const fixedValue = absoluteValue.toFixed(decimalPlaces);
+  // Resolve o problema de arredondamento nativo do JS
+  const factor = Math.pow(10, decimalPlaces);
+  const fixedValue = (Math.round(absoluteValue * factor) / factor).toFixed(decimalPlaces);
+  
   const [integerPart, decimalPart] = fixedValue.split(".");
   
   // Adiciona a vírgula como separador de milhar
